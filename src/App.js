@@ -49,8 +49,10 @@ function App() {
     globalCurrentMeasurement = currentMeasurement
   }
 
+// axios.get("https://weather-website-backend.herokuapp.com/getweather/" + cityQuery).then((response) => {
+
   const onFormSubmit = (event) => {
-    axios.get("/getweather/" + cityQuery).then((response) => {
+    axios.get("https://weather-website-backend.herokuapp.com/getweather/" + cityQuery).then((response) => {
       tempsC[0] = response.data.maxTempC1;
       tempsC[1] = response.data.minTempC1;
       tempsC[2] = response.data.maxTempC2;
@@ -107,6 +109,7 @@ function App() {
       setConditions(tempCondtions)
       globalCurrentMeasurement = currentMeasurement  
     });
+    //outside
     setFormData(cityQuery);
     event.preventDefault();
   };
@@ -212,7 +215,7 @@ function App() {
           className="custom-footer"
           style={{ backgroundColor: "grey" }}
         >
-          <p>This website is a passion project and is not intended for for deatailed weather reports. Please direct any questions, comments or concerns to dafdsfa@gmail.com</p>
+          <p>This website is a passion project and is not intended for for deatailed weather reports. Please direct any questions, comments or concerns to ezramoss4@gmail.com</p>
         </Card.Footer>
       </body>
     </div>
