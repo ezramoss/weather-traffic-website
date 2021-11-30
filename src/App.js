@@ -213,7 +213,7 @@ function App() {
           className="custom-footer"
           style={{ backgroundColor: "grey" }}
         >
-          <p>This website is a passion project and is not intended for for detailed weather reports. Please direct any questions, comments, or concerns to ezramoss4@gmail.com</p>
+          <p>This website is a passion project and is not intended for detailed weather reports. Please direct any questions, comments, or concerns to ezramoss4@gmail.com</p>
         </Card.Footer>
       </body>
     </div>
