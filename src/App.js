@@ -50,13 +50,14 @@ function App() {
   }
 
   const onFormSubmit = (event) => {
-    axios.get("https://weather-website-backend.herokuapp.com/getweather/" + cityQuery).then((response) => {
+    axios.get("https://weather-website-backend-0be487779640.herokuapp.com/getweather/" + cityQuery).then((response) => {
       tempsC[0] = response.data.maxTempC1;
       tempsC[1] = response.data.minTempC1;
       tempsC[2] = response.data.maxTempC2;
       tempsC[3] = response.data.minTempC2;
       tempsC[4] = response.data.maxTempC3;
       tempsC[5] = response.data.minTempC3;
+      console.log(response)
 
       tempsF[0] = response.data.maxTempF1;
       tempsF[1] = response.data.minTempF1;
