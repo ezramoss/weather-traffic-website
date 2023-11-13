@@ -38,6 +38,7 @@ function App() {
     { name: "°C", value: "2" },
   ];
 
+  //Change Between Celsius and Fahrenheit
   function changeMeasurement() {
     if (currentMeasurement === 1) {
       setTempsData(tempsC);
@@ -49,16 +50,21 @@ function App() {
     globalCurrentMeasurement = currentMeasurement
   }
 
+  //Query Backend & Populate Temp/Condition Arrays with Location Result
   const onFormSubmit = (event) => {
     axios.get("https://weather-website-backend-0be487779640.herokuapp.com/getweather/" + cityQuery).then((response) => {
+      
+      console.log(response)
+
+      //Celsius
       tempsC[0] = response.data.maxTempC1;
       tempsC[1] = response.data.minTempC1;
       tempsC[2] = response.data.maxTempC2;
       tempsC[3] = response.data.minTempC2;
       tempsC[4] = response.data.maxTempC3;
       tempsC[5] = response.data.minTempC3;
-      console.log(response)
 
+      //Fahrenheit
       tempsF[0] = response.data.maxTempF1;
       tempsF[1] = response.data.minTempF1;
       tempsF[2] = response.data.maxTempF2;
@@ -66,16 +72,19 @@ function App() {
       tempsF[4] = response.data.maxTempF3;
       tempsF[5] = response.data.minTempF3;
 
+      //Condtions
       tempCondtions[0] = response.data.conditions1
       tempCondtions[1] = response.data.conditions2
       tempCondtions[2] = response.data.conditions3
 
+      //Location
       globalLocations[0] = response.data.name
       globalLocations[1] = response.data.region
       globalLocations[2] = response.data.country
 
       setLocation(globalLocations);
 
+      //Get and Set Icons
       var tempIcon1 = response.data.icon1
       var tempIcon2 = response.data.icon2
       var tempIcon3 = response.data.icon3
@@ -86,6 +95,7 @@ function App() {
 
       setIcons(globalIcons);
 
+      //Get and Set
       var date1 = new Date(response.data.date1);
       var date2 = new Date(response.data.date2);
       var date3 = new Date(response.data.date3);
@@ -100,6 +110,7 @@ function App() {
 
       setDates(globalDates);
 
+      //Set Temp based on current unit of measurement
       if (currentMeasurement == 1) {
         setTempsData(tempsF);
       } else {
@@ -117,6 +128,7 @@ function App() {
     cityQuery = event.target.value;
   };
 
+  //Main Content
   return (
     <div>
       <header className="App-header"></header>
@@ -221,6 +233,7 @@ function App() {
   );
 }
 
+//Weather Card Component
 function WeatherCard(props) {
   return (
     <Card className="mb-3" style={({ color: "black" }, { width: "20rem" })}>
