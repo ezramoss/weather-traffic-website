@@ -183,6 +183,9 @@ function App() {
             </Container>
           </div>
         </Form>
+
+        {/* Weather Cards */}
+
         <div className="mt-5">
           <Container>
             {formData &&
