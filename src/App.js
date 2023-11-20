@@ -1,15 +1,5 @@
 import "./App.css";
-import {
-  Button,
-  Card,
-  Form,
-  Row,
-  Col,
-  Container,
-  ButtonGroup,
-  ToggleButton,
-  Image,
-} from "react-bootstrap";
+import { Button, Card, Form, Row, Col, Container, ButtonGroup, ToggleButton, Image,} from "react-bootstrap";
 import React, { useState, Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
@@ -17,21 +7,21 @@ import axios from "axios";
 var globalCurrentMeasurement = 1
 var tempsF = new Array(6);
 var tempsC = new Array(6);
-var globalDates = new Array(6)
+var globalDates = new Array(3)
 var globalIcons = new Array(3)
 var globalLocations = new Array(3)
+var tempCondtions = new Array(3)
 
 function App() {
-  var currentMeasurement = globalCurrentMeasurement
-  var tempCondtions = new Array(3);  
+  var currentMeasurement = globalCurrentMeasurement 
   var cityQuery = "";
-  const [temps, setTempsData] = useState(new Array(6));
-  const [conditions, setConditions] = useState(new Array(3))
+  const [temps, setTempsData] = useState([]);
+  const [conditions, setConditions] = useState([])
   const [formData, setFormData] = useState();
-  const [dates, setDates] = useState(new Array(3))
-  const [icons, setIcons] = useState(new Array(3))
-  const [locations, setLocation] = useState(new Array(3))
-
+  const [dates, setDates] = useState([])
+  const [icons, setIcons] = useState([])
+  const [locations, setLocation] = useState([])
+  const [newQuery, setQuery] = useState(1)
   const [isChecked, setChecked] = useState("1");
   const measurements = [
     { name: "°F", value: "1" },
@@ -52,71 +42,40 @@ function App() {
 
   //Query Backend & Populate Temp/Condition Arrays with Location Result
   const onFormSubmit = (event) => {
-    axios.get("https://weather-website-backend-0be487779640.herokuapp.com/getweather/" + cityQuery).then((response) => {
+    axios.get("https://weather-website-backend-0be487779640.herokuapp.com/getWeather/" + cityQuery).then((response) => {
       
       console.log(response)
+      var tempCount = 0
+      for(let i = 0;i < response.data.dayArray.length;i++) {
+        tempsC[tempCount] = response.data.dayArray[i]['maxTempC']
+        tempsC[tempCount+1] = response.data.dayArray[i]['minTempC']
+        tempsF[tempCount] = response.data.dayArray[i]['maxTempF']
+        tempsF[tempCount+1] = response.data.dayArray[i]['minTempF']
+        tempCondtions[i] = response.data.dayArray[i]['conditions']
+        globalIcons[i] = response.data.dayArray[i]['icon']
+        var date = new Date(response.data.dayArray[i]['date'])
+        date.setDate(date.getDate() + 1)
+        globalDates[i] = date.toLocaleDateString('en-US', { weekday: 'long' })
+        tempCount +=2
+      }
 
-      //Celsius
-      tempsC[0] = response.data.maxTempC1;
-      tempsC[1] = response.data.minTempC1;
-      tempsC[2] = response.data.maxTempC2;
-      tempsC[3] = response.data.minTempC2;
-      tempsC[4] = response.data.maxTempC3;
-      tempsC[5] = response.data.minTempC3;
-
-      //Fahrenheit
-      tempsF[0] = response.data.maxTempF1;
-      tempsF[1] = response.data.minTempF1;
-      tempsF[2] = response.data.maxTempF2;
-      tempsF[3] = response.data.minTempF2;
-      tempsF[4] = response.data.maxTempF3;
-      tempsF[5] = response.data.minTempF3;
-
-      //Condtions
-      tempCondtions[0] = response.data.conditions1
-      tempCondtions[1] = response.data.conditions2
-      tempCondtions[2] = response.data.conditions3
-
-      //Location
+      //Get Location
       globalLocations[0] = response.data.name
       globalLocations[1] = response.data.region
       globalLocations[2] = response.data.country
 
-      setLocation(globalLocations);
-
-      //Get and Set Icons
-      var tempIcon1 = response.data.icon1
-      var tempIcon2 = response.data.icon2
-      var tempIcon3 = response.data.icon3
-
-      globalIcons[0] = tempIcon1
-      globalIcons[1] = tempIcon2
-      globalIcons[2] = tempIcon3
-
-      setIcons(globalIcons);
-
-      //Get and Set
-      var date1 = new Date(response.data.date1);
-      var date2 = new Date(response.data.date2);
-      var date3 = new Date(response.data.date3);
-
-      date1.setDate(date1.getDate() + 1)
-      date2.setDate(date2.getDate() + 1)
-      date3.setDate(date3.getDate() + 1)
-
-      globalDates[0] = date1.toLocaleDateString('en-US', { weekday: 'long' }) 
-      globalDates[1] = date2.toLocaleDateString('en-US', { weekday: 'long' }) 
-      globalDates[2] = date3.toLocaleDateString('en-US', { weekday: 'long' })
-
-      setDates(globalDates);
-
       //Set Temp based on current unit of measurement
-      if (currentMeasurement == 1) {
-        setTempsData(tempsF);
-      } else {
-        setTempsData(tempsC);
-      }
+      currentMeasurement === 1 ? setTempsData(tempsF) : setTempsData(tempsC)
+
+      //Update React to Re-Render page
+      newQuery === 1 ? setQuery(2) : setQuery(1)
+
+      //Set Date, Location, Icon, and Conditions
+      setDates(globalDates);
+      setLocation(globalLocations);
+      setIcons(globalIcons);
       setConditions(tempCondtions)
+      
       globalCurrentMeasurement = currentMeasurement  
     });
     
@@ -231,6 +190,7 @@ function App() {
         >
           <p>This website is a passion project and is not intended for detailed weather reports. Please direct any questions, comments, or concerns to ezramoss4@gmail.com</p>
         </Card.Footer>
+        <script src="//code.tidio.co/oliytrtjq4s9jdye26tnsvoyz4xbpumx.js" async></script>
       </body>
     </div>
   );
