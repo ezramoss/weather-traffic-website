@@ -3,6 +3,7 @@ import { Button, Card, Form, Row, Col, Container, ButtonGroup, ToggleButton, Ima
 import React, { useState, Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
+import Helmet from "react-helmet"
 
 var globalCurrentMeasurement = 1
 var tempsF = new Array(6);
@@ -192,6 +193,9 @@ function App() {
         </Card.Footer>
         <script src="//code.tidio.co/oliytrtjq4s9jdye26tnsvoyz4xbpumx.js" async></script>
       </body>
+      <Helmet>
+        <script src="//code.tidio.co/oliytrtjq4s9jdye26tnsvoyz4xbpumx.js" async></script>
+      </Helmet>
     </div>
   );
 }
