@@ -190,7 +190,6 @@ function App() {
         >
           <p>This website is a passion project and is not intended for detailed weather reports. Please direct any questions, comments, or concerns to ezramoss4@gmail.com</p>
         </Card.Footer>
-        <script src="//code.tidio.co/oliytrtjq4s9jdye26tnsvoyz4xbpumx.js" async></script>
       </body>
     </div>
   );
