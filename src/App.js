@@ -3,23 +3,16 @@ import { Button, Card, Form, Row, Col, Container, ButtonGroup, ToggleButton, Ima
 import React, { useState, Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
+import Day from "./Day.js";
 
-var globalCurrentMeasurement = 1
-var tempsF = new Array(6);
-var tempsC = new Array(6);
-var globalDates = new Array(3)
-var globalIcons = new Array(3)
 var globalLocations = new Array(3)
-var tempCondtions = new Array(3)
+var globalMeasurement = 1
 
 function App() {
-  var currentMeasurement = globalCurrentMeasurement 
   var cityQuery = "";
-  const [temps, setTempsData] = useState([]);
-  const [conditions, setConditions] = useState([])
+  const [measurement, setMeasurement] = useState(1);
+  const [days, setDays] = useState([]);
   const [formData, setFormData] = useState();
-  const [dates, setDates] = useState([])
-  const [icons, setIcons] = useState([])
   const [locations, setLocation] = useState([])
   const [newQuery, setQuery] = useState(1)
   const [isChecked, setChecked] = useState("1");
@@ -30,53 +23,45 @@ function App() {
 
   //Change Between Celsius and Fahrenheit
   function changeMeasurement() {
-    if (currentMeasurement === 1) {
-      setTempsData(tempsC);
-      currentMeasurement = 2;
+    if (measurement === 1) {
+      globalMeasurement = 2;
+      setMeasurement(2)
     } else {
-      setTempsData(tempsF);
-      currentMeasurement = 1;
+      globalMeasurement  = 1;
+      setMeasurement(1)
     }
-    globalCurrentMeasurement = currentMeasurement
   }
 
   //Query Backend & Populate Temp/Condition Arrays with Location Result
   const onFormSubmit = (event) => {
-    axios.get("https://weather-website-backend-0be487779640.herokuapp.com/getWeather/" + cityQuery).then((response) => {
-      
+      axios.get("https://weather-website-backend-0be487779640.herokuapp.com/getWeather/" + cityQuery).then((response) => {
+      const tempDays = []
       console.log(response)
-      var tempCount = 0
       for(let i = 0;i < response.data.dayArray.length;i++) {
-        tempsC[tempCount] = response.data.dayArray[i]['maxTempC']
-        tempsC[tempCount+1] = response.data.dayArray[i]['minTempC']
-        tempsF[tempCount] = response.data.dayArray[i]['maxTempF']
-        tempsF[tempCount+1] = response.data.dayArray[i]['minTempF']
-        tempCondtions[i] = response.data.dayArray[i]['conditions']
-        globalIcons[i] = response.data.dayArray[i]['icon']
         var date = new Date(response.data.dayArray[i]['date'])
         date.setDate(date.getDate() + 1)
-        globalDates[i] = date.toLocaleDateString('en-US', { weekday: 'long' })
-        tempCount +=2
+        date = date.toLocaleDateString('en-US', { weekday: 'long' })
+        const newDay = new Day(
+          response.data.dayArray[i]['maxTempC'],
+          response.data.dayArray[i]['minTempC'],
+          response.data.dayArray[i]['maxTempF'],
+          response.data.dayArray[i]['minTempF'],
+          response.data.dayArray[i]['conditions'],
+          response.data.dayArray[i]['icon'],
+          date
+        )
+        tempDays.push(newDay)
       }
+      setDays(tempDays)
 
-      //Get Location
+      //Get & Set Location
       globalLocations[0] = response.data.name
       globalLocations[1] = response.data.region
       globalLocations[2] = response.data.country
-
-      //Set Temp based on current unit of measurement
-      currentMeasurement === 1 ? setTempsData(tempsF) : setTempsData(tempsC)
+      setLocation(globalLocations);
 
       //Update React to Re-Render page
       newQuery === 1 ? setQuery(2) : setQuery(1)
-
-      //Set Date, Location, Icon, and Conditions
-      setDates(globalDates);
-      setLocation(globalLocations);
-      setIcons(globalIcons);
-      setConditions(tempCondtions)
-      
-      globalCurrentMeasurement = currentMeasurement  
     });
     
     setFormData(cityQuery);
@@ -155,39 +140,22 @@ function App() {
               </Col>
               </Row>
               <Row className="justify-content-center">
+              {days.map((day) => 
               <WeatherCard
-                dayName={dates[0]}
-                city={formData}
-                conditions={conditions[0]}
-                icon = {icons[0]}
-                tempMax={temps[0]}
-                tempMin={temps[1]}
-              />
-              <WeatherCard
-                dayName={dates[1]}
-                city={formData}
-                conditions={conditions[1]}
-                icon = {icons[1]}
-                tempMax={temps[2]}
-                tempMin={temps[3]}
-              />
-              <WeatherCard
-                dayName={dates[2]}
-                city={formData}
-                conditions={conditions[2]}
-                icon = {icons[2]}
-                tempMax={temps[4]}
-                tempMin={temps[5]}
-              />
+                dayName={day.date}
+                conditions={day.conditions}
+                icon = {day.icon}
+                maxTempC = {day.maxTempC}
+                minTempC = {day.minTempC}
+                maxTempF = {day.maxTempF}
+                minTempF = {day.minTempF}
+              />)}
             </Row>
             </div>
             }
           </Container>
         </div>
-        <Card.Footer
-          className="custom-footer"
-          style={{ backgroundColor: "grey" }}
-        >
+        <Card.Footer className="custom-footer" style={{ backgroundColor: "grey" }}>
           <p>This website is a passion project and is not intended for detailed weather reports. Please direct any questions, comments, or concerns to ezramoss4@gmail.com</p>
         </Card.Footer>
       </body>
@@ -207,11 +175,9 @@ function WeatherCard(props) {
       <Image src={props.icon} style={{width: 50}, {height: 50}} rounded />
       </div>
       <Card.Body>
-        <div>
           <h3>{props.conditions}</h3>
-          <h3>High: {props.tempMax}</h3>
-          <h3>Low: {props.tempMin}</h3>
-        </div>
+          <h3>High: {globalMeasurement === 1 ? props.maxTempF :  props.maxTempC }</h3>
+          <h3>Low: {globalMeasurement === 1 ? props.minTempF :  props.minTempC }</h3>
       </Card.Body>
     </Card>
   );

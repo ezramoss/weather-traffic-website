@@ -1,4 +1,4 @@
-export class Day {
+export default class Day {
     constructor(maxTempC, minTempC, maxTempF, minTempF, conditions, icon, date) {
       this.maxTempC = maxTempC;
       this.minTempC = minTempC;
