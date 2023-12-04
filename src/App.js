@@ -1,6 +1,6 @@
 import "./App.css";
 import { Button, Card, Form, Row, Col, Container, ButtonGroup, ToggleButton, Image,} from "react-bootstrap";
-import React, { useState, Component } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import Day from "./Day.js";
@@ -9,10 +9,9 @@ var globalLocations = new Array(3)
 var globalMeasurement = 1
 
 function App() {
-  var cityQuery = "";
   const [measurement, setMeasurement] = useState(1);
   const [days, setDays] = useState([]);
-  const [formData, setFormData] = useState();
+  const [formData, setFormData] = useState("");
   const [locations, setLocation] = useState([])
   const [newQuery, setQuery] = useState(1)
   const [isChecked, setChecked] = useState("1");
@@ -20,6 +19,7 @@ function App() {
     { name: "°F", value: "1" },
     { name: "°C", value: "2" },
   ];
+  var cityQuery = formData
 
   //Change Between Celsius and Fahrenheit
   function changeMeasurement() {
@@ -33,8 +33,9 @@ function App() {
   }
 
   //Query Backend & Populate Temp/Condition Arrays with Location Result
-  const onFormSubmit = (event) => {
-      axios.get("https://weather-website-backend-0be487779640.herokuapp.com/getWeather/" + cityQuery).then((response) => {
+  useEffect(() => {
+    if(formData === "") return
+    axios.get("https://weather-website-backend-0be487779640.herokuapp.com/getWeather/" + cityQuery).then((response) => {
       const tempDays = []
       console.log(response)
       for(let i = 0;i < response.data.dayArray.length;i++) {
@@ -63,7 +64,10 @@ function App() {
       //Update React to Re-Render page
       newQuery === 1 ? setQuery(2) : setQuery(1)
     });
-    
+  
+  }, [formData]);
+
+  const onFormSubmit = (event) => {
     setFormData(cityQuery);
     event.preventDefault();
   };
