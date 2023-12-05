@@ -139,17 +139,8 @@ function WeatherWebsite() {
               </Col>
               </Row>
               <Row className="justify-content-center">
-              {days.map((day) => 
-              <WeatherCard
-                dayName={day.date}
-                conditions={day.conditions}
-                icon = {day.icon}
-                maxTempC = {day.maxTempC}
-                minTempC = {day.minTempC}
-                maxTempF = {day.maxTempF}
-                minTempF = {day.minTempF}
-              />)}
-            </Row>
+              {days.map((day) => <WeatherCard day = {day}/>)}
+              </Row>
             </div>
             }
           </Container>
@@ -168,15 +159,15 @@ function WeatherCard(props) {
     <Card className="mb-3" style={({ color: "black" }, { width: "20rem" })}>
       <br></br>
       <Card.Title className="text-center" style={{ fontSize: 45 }}>
-        {props.dayName}
+        {props.day.date}
       </Card.Title>
       <div>
-      <Image src={props.icon} style={{width: 50}, {height: 50}} rounded />
+      <Image src={props.day.icon} style={{width: 50}, {height: 50}} rounded />
       </div>
       <Card.Body>
-          <h3>{props.conditions}</h3>
-          <h3>High: {globalMeasurement === 1 ? props.maxTempF :  props.maxTempC }</h3>
-          <h3>Low: {globalMeasurement === 1 ? props.minTempF :  props.minTempC }</h3>
+          <h3>{props.day.conditions}</h3>
+          <h3>High: {globalMeasurement === 1 ? props.day.maxTempF :  props.day.maxTempC }</h3>
+          <h3>Low: {globalMeasurement === 1 ? props.day.minTempF :  props.day.minTempC }</h3>
       </Card.Body>
     </Card>
   );
