@@ -8,7 +8,7 @@ import Day from "./Day.js";
 var globalLocations = new Array(3)
 var globalMeasurement = 1
 
-function App() {
+function WeatherWebsite() {
   const [measurement, setMeasurement] = useState(1);
   const [days, setDays] = useState([]);
   const [formData, setFormData] = useState("");
@@ -23,19 +23,14 @@ function App() {
 
   //Change Between Celsius and Fahrenheit
   function changeMeasurement() {
-    if (measurement === 1) {
-      globalMeasurement = 2;
-      setMeasurement(2)
-    } else {
-      globalMeasurement  = 1;
-      setMeasurement(1)
-    }
+    return measurement === 1 ? (globalMeasurement = 2, setMeasurement(2)):
+      (globalMeasurement = 1, setMeasurement(1));
   }
 
   //Query Backend & Populate Temp/Condition Arrays with Location Result
   useEffect(() => {
     if(formData === "") return
-    axios.get("https://weather-website-backend-0be487779640.herokuapp.com/getWeather/" + cityQuery).then((response) => {
+      axios.get("https://weather-website-backend-0be487779640.herokuapp.com/getWeather/" + cityQuery).then((response) => {
       const tempDays = []
       console.log(response)
       for(let i = 0;i < response.data.dayArray.length;i++) {
@@ -187,4 +182,4 @@ function WeatherCard(props) {
   );
 }
 
-export default App;
+export default WeatherWebsite;
