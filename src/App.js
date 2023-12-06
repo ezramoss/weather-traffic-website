@@ -77,74 +77,61 @@ function WeatherWebsite() {
       <header className="App-header"></header>
       <body>
         <Form onSubmit={onFormSubmit}>
-          <div className="mt-3">
-            <Container>
-              <Row className="justify-content-center">
-                <Col xs="auto">
-                  <h1 className="text">Find Your Weather</h1>
-                </Col>
-              </Row>
-            </Container>
-          </div>
-          <div className="mt-3">
-            <Container>
-              <Row className="justify-content-center">
-                <Col xs="auto">
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter Location"
-                    onChange={onFormChange}
-                  />
-                </Col>
-                <Col xs="auto">
-                  <Button type="submit">Go</Button>
-                </Col>
-                <Col xs="auto">
-                  <ButtonGroup>
-                    {measurements.map((measurement, idx) => (
-                      <ToggleButton
-                        key={Math.random()}
-                        id={`radio-${idx}`}
-                        type="radio"
-                        variant={
-                          (idx = 1 ? "outline-success" : "outline-danger")
-                        }
-                        name="radio"
-                        value={measurement.value}
-                        checked={isChecked === measurement.value}
-                        onChange={(e) => {
-                          setChecked(e.currentTarget.value);
-                          changeMeasurement();
-                        }}
-                      >
+          <Container className="mt-3">
+            <Row className="justify-content-center" xs="auto">
+              <h1 className="text">Find Your Weather</h1>
+            </Row>
+          </Container>
+          <Container className="mt-3">
+            <Row className="justify-content-center" xs="auto">
+              <Col>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Location"
+                  onChange={onFormChange}
+                />
+              </Col>
+              <Col> <Button type="submit">Go</Button> </Col>
+              <Col>
+                <ButtonGroup>
+                  {measurements.map((measurement, idx) => (
+                    <ToggleButton
+                      key={Math.random()}
+                      id={`radio-${idx}`}
+                      type="radio"
+                      variant={
+                        (idx = 1 ? "outline-success" : "outline-danger")
+                      }
+                      name="radio"
+                      value={measurement.value}
+                      checked={isChecked === measurement.value}
+                      onChange={(e) => {
+                        setChecked(e.currentTarget.value);
+                        changeMeasurement();
+                      }}>
                         {measurement.name}
                       </ToggleButton>
                     ))}
-                  </ButtonGroup>
-                </Col>
-              </Row>
-            </Container>
-          </div>
+                </ButtonGroup>
+              </Col>
+            </Row>
+          </Container>
         </Form>
 
         {/* Weather Cards */}
 
-        <div className="mt-5">
-          <Container>
-            {formData &&
-            <div>
-              <Row className="justify-content-center">
-              <Col xs="auto">
-                <h1>{locations[0]}, {locations[1]}, {locations[2]}</h1>
-              </Col>
-              </Row>
-              <Row className="justify-content-center">
+        <Container className="mt-5">
+          {formData &&
+          <div>
+            <Row className="justify-content-center" xs="auto">
+              <h1>{locations[0]}, {locations[1]}, {locations[2]}</h1>
+            </Row>
+            <Row className="justify-content-center">
               {days.map((day) => <WeatherCard day = {day}/>)}
-              </Row>
-            </div>
-            }
-          </Container>
-        </div>
+            </Row>
+          </div>
+          }
+        </Container>
         <Card.Footer className="custom-footer" style={{ backgroundColor: "grey" }}>
           <p>This website is a passion project and is not intended for detailed weather reports. Please direct any questions, comments, or concerns to ezramoss4@gmail.com</p>
         </Card.Footer>
