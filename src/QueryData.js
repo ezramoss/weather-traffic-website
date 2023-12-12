@@ -6,10 +6,7 @@ function QueryData(cityQuery) {
   let tempDays = new Array(3);
   let locationData = [];
   if (cityQuery === "") return { tempDays, locationData };
-  //return axios.get("https://weather-website-backend-0be487779640.herokuapp.com/getWeather/" + cityQuery).then((response) => {
-  return axios
-    .get("http://localhost:5000/getWeather/" + cityQuery)
-    .then((response) => {
+  return axios.get("https://weather-website-backend-0be487779640.herokuapp.com/getWeather/" + cityQuery).then((response) => {
       console.log(response);
       for (let i = 0; i < response.data.dayArray.length; i++) {
         var date = new Date(response.data.dayArray[i]["date"]);
