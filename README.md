@@ -1,2 +1,2 @@
 # weather-traffic-website
-https://ezramoss.github.io/weather-website/
+https://ezramoss.github.io/weather-traffic-website/
